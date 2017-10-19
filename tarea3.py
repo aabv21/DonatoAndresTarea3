@@ -1,13 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 '''
-Created on 17 oct. 2017
+Created on 18 oct. 2017
 
-@author: aabv
+@author: Andres Buelvas 13-10184
+@author: Donato Bracuto 13-10173
 '''
-
-
 
 from datetime import date
 
+#Clase creada para guardar los montos, fecha y identificador del establecimiento donde se haga una recarga o consumo
 class nodo:
     
     def __init__(self):
@@ -22,7 +24,8 @@ class nodo:
         
         print("id del Establecimiento: " +str(self.idEstablecimiento)+ " ---- monto:" 
               +str(self.monto)+ " ---- fecha: " +str(self.fecha))
-            
+    
+    #Metodo que sirve para registrar una operacion ya sea recarga o consumo       
     def appendRecargaConsumo(self, idEstablecimiento, monto, fecha):
         
         UltimoAppend = False
@@ -42,11 +45,10 @@ class nodo:
                 self.imprimirValores()
                 UltimoAppend  = True
                         
-
+#Billetera electronica
 class billeteraElectronica:
     
     def __init__(self, idd, nombres, apellidos, ci, pin):
-        
         self.id = idd
         self.nombres = nombres
         self.apellidos = apellidos
@@ -54,69 +56,42 @@ class billeteraElectronica:
         self.creditoRecarga = nodo()
         self.debitoConsumo = nodo()
         self.pin = pin
-        
+    
+    #Metodo qeu sirve para imprimir el saldo actual de la cuenta
     def saldo(self):
         
         dinero = self.creditoRecarga.total - self.debitoConsumo.total
         return dinero
     
+    #Metodo qeu sirve para realizar una recarga a la cuenta
     def recargar(self, idEstablecimiento, monto, fecha):
         
-        if idEstablecimiento < 0 and monto < 0:
-            pass
-        
-        else:
+        #Verificamos si los datos son validos
+        if idEstablecimiento >= 0 and monto >= 0:
             self.creditoRecarga.appendRecargaConsumo(idEstablecimiento, monto, fecha)
             #print("Recarga Exitosa")
-    
+        else:
+            pass
+            
+    #Metodo qeu sirve para realizar un consumo
     def consumir(self, idEstablecimiento, monto, fecha, pin):
         
-        if idEstablecimiento < 0 and monto < 0 and pin < 0:
-            pass
-        
-        else:
-        
+        #Verificamos si los datos son validos
+        if idEstablecimiento >= 0 and monto >= 0 and pin >= 0:
             if pin != self.pin:
                 #print("Clave incorrecta")
                 pass
                 
             else:
-                if self.saldo() < monto:
+                # Verificamos si el saldo actual de la cuenta es suficiente
+                if self.saldo() < monto: 
                     #print("Saldo insuficiente") 
                     pass
                     
                 else:
                     self.debitoConsumo.appendRecargaConsumo(idEstablecimiento, monto, fecha)
-                    #print("Consumo Exitoso")
-            
-##############################
-######### Programa
-##############################
-'''
-miBilletera = billeteraElectronica(1, "Andres Alejandro", "Buelvas Vergara", 24222622, 1111)
-print("Mi saldo actual:" + str(miBilletera.saldo())+"\n")
-fecha = date(2017, 1, 12) #Anyo - mes - dia
-miBilletera.recargar(1, 1000, fecha)
-print("Mi saldo actual:" + str(miBilletera.saldo())+"\n")
-miBilletera.recargar(2, 500, fecha)
-print("Mi saldo actual:" + str(miBilletera.saldo())+"\n")
-miBilletera.consumir(1, 300, fecha, 1111)
-print("Mi saldo actual:" + str(miBilletera.saldo())+"\n")
-miBilletera.consumir(1, 600, fecha, 1111)
-miBilletera.consumir(1, 400, fecha, 1111)
-miBilletera.recargar(1, 1000, fecha)
-miBilletera.recargar(1, 300, fecha)
-miBilletera.recargar(1, 2000, fecha)
-miBilletera.recargar(1, 200, fecha)
-print("Mi saldo actual:" + str(miBilletera.saldo())+"\n")
-miBilletera.consumir(1, 400, fecha, 2222)
-print("Mi saldo actual:" + str(miBilletera.saldo())+"\n")
-miBilletera.consumir(1, 3400, fecha, 1111)
-print("Mi saldo actual:" + str(miBilletera.saldo())+"\n")
-miBilletera.consumir(1, 400, fecha, 1111)
-print("Mi saldo actual:" + str(miBilletera.saldo())+"\n")
-'''
-
-      
-              
+                    #print("Consumo Exitoso")  
+        
+        else:
+            pass                 
         
